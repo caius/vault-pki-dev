@@ -19,3 +19,9 @@ ca
 ├── intermediate_cert.csr
 └── root_cert.crt
 ```
+
+Once you've done this, you can generate certificates under the "internal.test" domain name quite happily. (The private key isn't stored in vault, and is only returned in the write response, so keep them safe.)
+
+  (internal-test is the role name from `setup.sh`)
+
+    vault write -format=json pki_inter/issue/internal-test common_name="001.internal.test" ttl="72h"

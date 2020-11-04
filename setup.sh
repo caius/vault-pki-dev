@@ -24,3 +24,8 @@ vault write -format=json pki_inter/intermediate/generate/internal common_name="c
 vault write -format=json pki/root/sign-intermediate csr=@ca/intermediate_cert.csr format=pem_bundle ttl="4380h" | \
   jq -r '.data.certificate' > ca/intermediate.cert.pem
 
+# Save intermediate cert back inside vault
+vault write pki_inter/intermediate/set-signed certificate=@ca/intermediate.cert.pem
+
+# Now we have to configure a role, so we can generate leaf certificates from the intermediate
+vault write pki_inter/roles/internal-test allowed_domains="internal.test" allow_subdomains=true max_ttl=720h
